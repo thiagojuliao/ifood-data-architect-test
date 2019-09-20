@@ -10,7 +10,7 @@ Use whatever language, storage and tools you feel comfortable to.
 
 Also, briefly elaborate on your solution, datalake architecture, nomenclature, partitioning, data model and validation method.
 
-Fork this repository and submit your code. The solution must contain a code ready to be submitted to a spark cluster.
+Fork this repository and submit your code. The solution must contain a notebook (databricks, jupyter), docker image or code ready to be submitted to a spark cluster.
 
 ## Requirements
 
@@ -25,10 +25,10 @@ Fork this repository and submit your code. The solution must contain a code read
   * Restaurant dataset.
   * Consumer dataset.
 * Trusted Layer:
-  * Order dataset -  one line per order with all data from order, consumer, restaurant and the LAST status from order statuses dataset. To help analysis, it would be a nice to have: dataset partitioned on the restaurant LOCAL date.
+  * Order dataset -  one line per order with all data from order, consumer, restaurant and the LAST status from order statuses dataset. To help analysis, it would be a nice to have: data partitioned on the restaurant LOCAL date.
   * Order Items dataset - easy to read dataset with one-to-many relationship with Order dataset. Must contain all data from _order_ items column.
   * Order statuses - Dataset containing one line per order with the timestamp for each registered event: CONCLUDED, REGISTERED, CANCELLED, PLACED.
-* For the trusted layer, anonymize any personal data.
+* For the trusted layer, anonymize any sensitive data.
 * At the end of each ETL, use any appropriated methods to validate your data.
 * Read performance, watch out for small files and skewed data.
 
