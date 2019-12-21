@@ -1,0 +1,13 @@
+root
+ |-- id: string (nullable = true)
+ |-- created_at: string (nullable = true)
+ |-- enabled: string (nullable = true)
+ |-- price_range: string (nullable = true)
+ |-- average_ticket: string (nullable = true)
+ |-- takeout_time: string (nullable = true)
+ |-- delivery_time: string (nullable = true)
+ |-- minimum_order_value: string (nullable = true)
+ |-- merchant_zip_code: string (nullable = true)
+ |-- merchant_city: string (nullable = true)
+ |-- merchant_state: string (nullable = true)
+ |-- merchant_country: string (nullable = true)
