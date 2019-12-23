@@ -15,10 +15,10 @@ from pyspark.sql.types import *
 ###############################
 
 # Referência de processamento
-ref = str(datetime.today() - timedelta(days=1))
+ref = str(datetime.today() - timedelta(days=1))[0:10]
 
 # Caminho de origem da raw order status
-origem_raw = "s3://ifood-raw-order-status/"
+origem_raw = "s3://ifood-raw-order-status/dt={}/*.parquet".format(ref)
 
 # Caminho de destino da trusted order status
 destino_trusted = "s3://ifood-trusted-order-status/"

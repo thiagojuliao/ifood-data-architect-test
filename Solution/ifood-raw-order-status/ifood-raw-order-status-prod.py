@@ -23,11 +23,12 @@ schema = StructType(
         StructField("value", StringType())
     ])
 
-# Referência de processamento
-ref = str(datetime.today() - timedelta(days=1))[0:10] 
+# Referências de processamento
+ref00 = str(datetime.today() - timedelta(days=2))[0:10]
+ref01 = str(datetime.today() - timedelta(days=1))[0:10] 
 
 # Caminho de origem da pouso order-status
-origem_pouso = "s3://ifood-landing-order-status/dt={}/*.json".format(ref)
+origem_pouso = ["s3://ifood-landing-order-status/dt={}".format(ref00), "s3://ifood-landing-order-status/dt={}".format(ref01)]
 
 # Caminho de destino da raw order
 destino_raw = "s3://ifood-raw-order-status/"
