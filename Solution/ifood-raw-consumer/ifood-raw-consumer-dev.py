@@ -44,7 +44,7 @@ rawDF = pousoDF \
 
 rawDF.write.partitionBy("dt").mode("overwrite").option("compression", "snappy").format("parquet").save(destino_raw)
 
-# validação
+# Validação
 # Leitura da base final
 rawDF_ = spark.read.parquet(destino_raw + "/*/*.parquet")
 
