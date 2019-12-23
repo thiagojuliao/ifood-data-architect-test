@@ -21,7 +21,7 @@ origem_pouso = "s3://ifood-landing-restaurant/full-load/restaurant.csv.gz"
 destino_raw = "s3://ifood-raw-restaurant/"
 
 # Inicia sessão spark
-spark = SparkSession.builder.appName("ifood-landing-restaurant-dev").getOrCreate()
+spark = SparkSession.builder.appName("ifood-raw-restaurant-dev").getOrCreate()
 
 # Configurações básicas para o spark
 spark.conf.set("spark.sql.maxPartitionBytes", 200 * 1024 * 1024) # Seta a quantidade máxima de bytes em uma partição ao ler os arquivos de entrada (Entre 100MB e 200MB é o ideal)

@@ -14,6 +14,33 @@ from pyspark.sql.types import *
 #   Definição de variáveis    #
 ###############################
 
+# Definindo o schema json
+schema = StructType(
+    [
+        StructField("cpf", StringType()),
+        StructField("customer_id", StringType()),
+        StructField("customer_name", StringType()),
+        StructField("delivery_address_city", StringType()),
+        StructField("delivery_address_country", StringType()),
+        StructField("delivery_address_district", StringType()),
+        StructField("delivery_address_external_id", StringType()),
+        StructField("delivery_address_latitude", StringType()),
+        StructField("delivery_address_longitude", StringType()),
+        StructField("delivery_address_state", StringType()),
+        StructField("delivery_address_zip_code", StringType()),
+        StructField("items", StringType()),
+        StructField("merchant_id", StringType()),
+        StructField("merchant_latitude", StringType()),
+        StructField("merchant_longitude", StringType()),
+        StructField("merchant_timezone", StringType()),
+        StructField("order_created_at", StringType()),
+        StructField("order_id", StringType()),
+        StructField("order_scheduled", BooleanType()),
+        StructField("order_scheduled_date", StringType()),
+        StructField("order_total_amount", DoubleType()),
+        StructField("origin_platform", StringType())
+    ])
+
 # Referência de processamento
 ref = str(datetime.today() - timedelta(days=1))[0:10]
 
@@ -24,7 +51,7 @@ origem_pouso = "s3://ifood-landing-order/dt={}/*.json".format(ref)
 destino_incremental = "s3://ifood-raw-order/"
 
 # Inicia sessão spark
-spark = SparkSession.builder.appName("ifood-landing-order-prod").getOrCreate()
+spark = SparkSession.builder.appName("ifood-raw-order-prod").getOrCreate()
 
 # Configurações básicas para o spark
 spark.conf.set("spark.sql.maxPartitionBytes", 200 * 1024 * 1024) # Seta a quantidade máxima de bytes em uma partição ao ler os arquivos de entrada (Entre 100MB e 200MB é o ideal)
@@ -35,7 +62,7 @@ spark.conf.set("spark.sql.sources.partitionOverwriteMode", "DYNAMIC") # Necessá
 ################################
 
 # Lê a pouso de origem
-pousoDF = spark.read.json(origem_pouso)
+pousoDF = spark.read.schema(schema).json(origem_pouso)
 
 # Cria a tabela raw
 rawDF = pousoDF \

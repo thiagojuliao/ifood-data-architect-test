@@ -24,7 +24,7 @@ origem_pouso = "s3://ifood-landing-consumer/dt={}/*.csv".format(ref)
 destino_incremental = "s3://ifood-raw-consumer/"
 
 # Inicia sessão spark
-spark = SparkSession.builder.appName("ifood-landing-consumer-prod").getOrCreate()
+spark = SparkSession.builder.appName("ifood-raw-consumer-prod").getOrCreate()
 
 # Configurações básicas para o spark
 spark.conf.set("spark.sql.maxPartitionBytes", 200 * 1024 * 1024) # Seta a quantidade máxima de bytes em uma partição ao ler os arquivos de entrada (Entre 100MB e 200MB é o ideal)
