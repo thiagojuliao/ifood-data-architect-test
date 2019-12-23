@@ -14,37 +14,53 @@ from pyspark.sql.types import *
 #   Definição de variáveis    #
 ###############################
 
+# Definição do schema json
+schema = StructType(
+    [
+        StructField("created_at", StringType()),
+        StructField("order_id", StringType()),
+        StructField("status_id", StringType()),
+        StructField("value", StringType())
+    ])
+
+# Referência de processamento
+ref = str(datetime.today() - timedelta(days=1))[0:10] 
+
 # Caminho de origem da pouso order-status
-origem_pouso = "s3://ifood-landing-order-status/full-load/status.json.gz"
+origem_pouso = "s3://ifood-landing-order-status/dt={}/*.json".format(ref)
 
 # Caminho de destino da raw order
 destino_raw = "s3://ifood-raw-order-status/"
 
 # Inicia sessão spark
-spark = SparkSession.builder.appName("ifood-landing-order-status-dev").getOrCreate()
+spark = SparkSession.builder.appName("ifood-landing-order-status-prod").getOrCreate()
 
 # Configurações básicas para o spark
 spark.conf.set("spark.sql.maxPartitionBytes", 200 * 1024 * 1024) # Seta a quantidade máxima de bytes em uma partição ao ler os arquivos de entrada (Entre 100MB e 200MB é o ideal)
-spark.conf.set("spark.sql.sources.partitionOverwriteMode", "DYNAMIC") # Necessário para sobrescrever partições 
+spark.conf.set("spark.sql.sources.partitionOverwriteMode", "DYNAMIC") # Necessário para sobrescrever partições  
 
 ################################
 #   Etapas do Processamento    #
 ################################
 
 # Lê a pouso de origem
-pousoDF = spark.read.json(origem_pouso)
+pousoDF = spark.read.schema(schema).json(origem_pouso)
 
+# Adiciona a coluna dt que definirá nossa partição
+pousoDF = pousoDF \
+    .withColumn("dt", expr("min(created_at) over(partition by order_id order by order_id)")) \
+    .withColumn("dt", col("dt").cast(DateType()))
+   
 # Cria a tabela raw
-rawDF = pousoDF_ \
+rawDF = pousoDF \
     .withColumn("dt_proc", current_date()) \
-    .withColumn("dt", col("created_at").cast(DateType())) \
     .dropDuplicates()
     
 rawDF.write.partitionBy("dt").mode("overwrite").option("compression", "snappy").format("parquet").save(destino_raw)
 
 # Validação
 # Leitura da base final
-rawDF_ = spark.read.parquet(destino_raw + "/*/*.parquet")
+rawDF_ = spark.read.parquet(destino_raw).filter(col("dt") == lit(ref))
 
 # Validação Volumétrica
 print("> Volumetria de saída equivale-se a de entrada ? --> {}".format(pousoDF.dropDuplicates().count() == rawDF_.count()))
