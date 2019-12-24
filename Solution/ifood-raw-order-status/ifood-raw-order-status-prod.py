@@ -24,11 +24,11 @@ schema = StructType(
     ])
 
 # Referências de processamento
-ref00 = str(datetime.today() - timedelta(days=2))[0:10]
+ref00 = str(datetime.today() - timedelta(days=7))[0:10]
 ref01 = str(datetime.today() - timedelta(days=1))[0:10] 
 
 # Caminho de origem da pouso order-status
-origem_pouso = ["s3://ifood-landing-order-status/dt={}".format(ref00), "s3://ifood-landing-order-status/dt={}".format(ref01)]
+origem_pouso = "s3://ifood-landing-order-status/dt={}"
 
 # Caminho de destino da raw order
 destino_raw = "s3://ifood-raw-order-status/"
@@ -45,7 +45,7 @@ spark.conf.set("spark.sql.sources.partitionOverwriteMode", "DYNAMIC") # Necessá
 ################################
 
 # Lê a pouso de origem
-pousoDF = spark.read.schema(schema).json(origem_pouso)
+pousoDF = spark.read.schema(schema).json(origem_pouso).filter(col("dt").between(ref00, ref01))
 
 # Adiciona a coluna dt que definirá nossa partição
 pousoDF = pousoDF \

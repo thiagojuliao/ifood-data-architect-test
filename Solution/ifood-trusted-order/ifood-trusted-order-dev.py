@@ -179,7 +179,6 @@ criptoDF = join02.select(criptografa_df(join02, cripto_ls))
 
 # Gera a base final trusted orders
 # Renomeia as colunas e cria as partições para gravação
-# Renomeia as colunas e cria as partições para gravação
 trustedDF = criptoDF \
     .select(colunas) \
     .withColumn("dt_proc", current_date()) \

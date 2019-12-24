@@ -42,7 +42,7 @@ colunas = ["order_id", "customer_id", expr("cpf as customer_cpf"), "customer_nam
     "order_scheduled_date", "order_total_amount", "origin_platform", "order_status"]
 
 # Referências de processamento
-ref00 = str(datetime.today() - timedelta(days=2))[0:10]
+ref00 = str(datetime.today() - timedelta(days=7))[0:10]
 ref01 = str(datetime.today() - timedelta(days=1))[0:10]
 
 # Caminho de origem da raw order
@@ -182,7 +182,6 @@ join02 = temp01DF.join(restDF_, on=["merchant_id"], how="left")
 criptoDF = join02.select(criptografa_df(join02, cripto_ls))
 
 # Gera a base final trusted orders
-# Renomeia as colunas e cria as partições para gravação
 # Renomeia as colunas e cria as partições para gravação
 trustedDF = criptoDF \
     .select(colunas) \

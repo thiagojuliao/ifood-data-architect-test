@@ -14,7 +14,42 @@ from pyspark.sql.types import *
 #   Definição de variáveis    #
 ###############################
 
-# Definindo o schema json
+# Definição do Schema de garnishItems que é um Array dentro de Items
+schema_value_currency = StructType([StructField("value", StringType()), StructField("currency", StringType())])
+schema_garnish = StructType(
+    [
+        StructField("name", StringType()),
+        StructField("addition", schema_value_currency),
+        StructField("discount", schema_value_currency),
+        StructField("quantity", DoubleType()),
+        StructField("sequence", IntegerType()),
+        StructField("unitPrice", schema_value_currency),
+        StructField("categoryId", StringType()),
+        StructField("externalId", StringType()),
+        StructField("totalValue", schema_value_currency),
+        StructField("categoryName", StringType()),
+        StructField("integrationId", StringType())
+    ])
+
+# Definição do Schema do Array de Items
+schema_items = StructType(
+    [
+        StructField("name", StringType()),
+        StructField("addition", schema_value_currency),
+        StructField("discount", schema_value_currency),
+        StructField("quantity", DoubleType()),
+        StructField("sequence", IntegerType()),
+        StructField("unitPrice", schema_value_currency),
+        StructField("externalId", StringType()),
+        StructField("totalValue", schema_value_currency),
+        StructField("customerNote", StringType()),
+        StructField("garnishItems", ArrayType(schema_garnish)),
+        StructField("integrationId", StringType()),
+        StructField("totalAddition", schema_value_currency),
+        StructField("totalDiscount", schema_value_currency)
+    ])
+
+# Definação do schema json
 schema = StructType(
     [
         StructField("cpf", StringType()),
@@ -28,7 +63,7 @@ schema = StructType(
         StructField("delivery_address_longitude", StringType()),
         StructField("delivery_address_state", StringType()),
         StructField("delivery_address_zip_code", StringType()),
-        StructField("items", StringType()),
+        StructField("items", ArrayType(schema_items)),
         StructField("merchant_id", StringType()),
         StructField("merchant_latitude", StringType()),
         StructField("merchant_longitude", StringType()),
