@@ -1,5 +1,0 @@
-root
- |-- created_at: string (nullable = true)
- |-- order_id: string (nullable = true)
- |-- status_id: string (nullable = true)
- |-- value: string (nullable = true)

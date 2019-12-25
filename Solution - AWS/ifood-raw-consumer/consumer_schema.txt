@@ -1,8 +1,0 @@
-root
- |-- customer_id: string (nullable = true)
- |-- language: string (nullable = true)
- |-- created_at: string (nullable = true)
- |-- active: string (nullable = true)
- |-- customer_name: string (nullable = true)
- |-- customer_phone_area: string (nullable = true)
- |-- customer_phone_number: string (nullable = true)
