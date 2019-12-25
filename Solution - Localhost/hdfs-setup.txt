@@ -1,0 +1,19 @@
+C:\Users\thiag\Downloads\order.json.gz
+C:\Users\thiag\Downloads\status.json.gz
+C:\Users\thiag\Downloads\consumer.csv.gz
+C:\Users\thiag\Downloads\restaurant.csv.gz
+
+hdfs dfs -mkdir /ifood-landing-order/full-load/
+hdfs dfs -mkdir /ifood-landing-order-status/full-load/
+hdfs dfs -mkdir /ifood-landing-consumer/full-load/
+hdfs dfs -mkdir /ifood-landing-restaurant/full-load/
+
+hdfs dfs -copyFromLocal C:\Users\thiag\Downloads\order.json.gz /ifood-landing-order/full-load/
+hdfs dfs -copyFromLocal C:\Users\thiag\Downloads\status.json.gz /ifood-landing-order-status/full-load/
+hdfs dfs -copyFromLocal C:\Users\thiag\Downloads\consumer.csv.gz /ifood-landing-consumer/full-load/
+hdfs dfs -copyFromLocal C:\Users\thiag\Downloads\restaurant.csv.gz /ifood-landing-restaurant/full-load/
+
+hdfs dfs -rm /ifood-landing-order/order.json.gz
+hdfs dfs -rm /ifood-landing-order-status/status.json.gz
+hdfs dfs -rm /ifood-landing-consumer/consumer.csv.gz
+hdfs dfs -rm /ifood-landing-restaurant/restaurant.csv.gz

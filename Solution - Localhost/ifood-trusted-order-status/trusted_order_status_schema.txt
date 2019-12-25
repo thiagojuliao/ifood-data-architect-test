@@ -1,0 +1,8 @@
+root
+ |-- order_id: string (nullable = true)
+ |-- dt: date (nullable = true)
+ |-- registered: timestamp (nullable = true)
+ |-- placed: timestamp (nullable = true)
+ |-- concluded: timestamp (nullable = true)
+ |-- cancelled: timestamp (nullable = true)
+ |-- dt_proc: date (nullable = false)
