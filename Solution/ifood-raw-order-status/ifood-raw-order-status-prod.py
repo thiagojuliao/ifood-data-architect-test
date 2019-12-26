@@ -27,13 +27,13 @@ schema = StructType(
 ref00 = str(datetime.today() - timedelta(days=2))[0:10]
 ref01 = str(datetime.today() - timedelta(days=1))[0:10]
 
-# Caminho de origem da pouso order-status
+# Caminho de origem da pouso order status
 origem_pouso = "hdfs://localhost:9000/ifood-landing-order-status/dt={}".format(ref01)
 
-# Caminho de origem da raw order
+# Caminho de origem da raw order status
 origem_raw = "hdfs://localhost:9000/ifood-raw-order-status/dt={}".format(ref00)
 
-# Caminho de destino da raw order
+# Caminho de destino da raw order status
 destino_raw = "hdfs://localhost:9000/ifood-raw-order-status/"
 
 # Inicia sessão spark

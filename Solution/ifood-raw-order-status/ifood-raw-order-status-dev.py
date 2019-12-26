@@ -23,10 +23,10 @@ schema = StructType(
         StructField("value", StringType())
     ])
     
-# Caminho de origem da pouso order-status
+# Caminho de origem da pouso order status
 origem_pouso = "hdfs://localhost:9000/ifood-landing-order-status/full-load/status.json.gz"
 
-# Caminho de destino da raw order
+# Caminho de destino da raw order status
 destino_raw = "hdfs://localhost:9000/ifood-raw-order-status/"
 
 # Inicia sessão spark
