@@ -71,21 +71,17 @@ spark.conf.set("spark.default.parallelism", 100) # Define a quantidade de tasks 
 
 # Lê a raw order
 #orderDF = spark.read.parquet(origem_order).drop("dt", "dt_proc").filter(col("dt") == "2019-01-01")
-orderDF = spark.read.parquet(origem_order).drop("dt", "dt_proc").persist(StorageLevel.DISK_ONLY)
-print("> Volumetria da raw order: {}".format(orderDF.count()))
+orderDF = spark.read.parquet(origem_order).drop("dt", "dt_proc")
 
 # Lê a raw order status
 #statusDF = spark.read.parquet(origem_status).drop("dt", "dt_proc").filter(col("dt") == "2019-01-01")
 statusDF = spark.read.parquet(origem_status).drop("dt", "dt_proc")
-print("> Volumetria da raw order status: {}".format(statusDF.count()))
 
 # Lê a raw restaurant
 restDF = spark.read.parquet(origem_rest).drop("dt", "dt_proc")
-print("> Volumetria da raw restaurant: {}".format(restDF.count()))
 
 # Lê a raw consumer
 consDF = spark.read.parquet(origem_cons).drop("dt", "dt_proc")
-print("> Volumetria da raw consumer: {}".format(consDF.count()))
 
 # Status mais recentes de cada pedido'
 statusDF_ = statusDF \
@@ -99,6 +95,7 @@ spark.conf.set("spark.sql.shuffle.partitions", int(spark.conf.get("spark.default
 orderDF \
     .write.mode("overwrite") \
     .bucketBy(int(spark.conf.get("spark.default.parallelism")), "order_id") \
+    .sortBy("order_id") \
     .option("compression", "snappy") \
     .format("parquet") \
     .saveAsTable("orders")
@@ -108,6 +105,7 @@ orderDF_ = spark.read.table("orders")
 statusDF_ \
     .write.mode("overwrite") \
     .bucketBy(int(spark.conf.get("spark.default.parallelism")), "order_id") \
+    .sortBy("order_id") \
     .option("compression", "snappy") \
     .format("parquet") \
     .saveAsTable("status")
@@ -132,6 +130,7 @@ join00_ = join00 \
 join00_ \
     .write.mode("overwrite") \
     .bucketBy(int(spark.conf.get("spark.default.parallelism")), "customer_id") \
+    .sortBy("customer_id") \
     .option("compression", "snappy") \
     .format("parquet") \
     .saveAsTable("temp00")
@@ -144,6 +143,7 @@ consDF \
     .withColumnRenamed("created_at", "costumer_created_at") \
     .write.mode("overwrite") \
     .bucketBy(int(spark.conf.get("spark.default.parallelism")), "customer_id") \
+    .sortBy("customer_id") \
     .option("compression", "snappy") \
     .format("parquet") \
     .saveAsTable("consumer")
@@ -156,6 +156,7 @@ restDF \
     .withColumnRenamed("created_at", "merchant_created_at") \
     .write.mode("overwrite") \
     .bucketBy(int(spark.conf.get("spark.default.parallelism")), "merchant_id") \
+    .sortBy("merchant_id") \
     .option("compression", "snappy") \
     .format("parquet") \
     .saveAsTable("restaurant")
@@ -168,6 +169,7 @@ join01 = temp00DF.join(consDF_, on=["customer_id"], how="left")
 join01 \
     .write.mode("overwrite") \
     .bucketBy(int(spark.conf.get("spark.default.parallelism")), "merchant_id") \
+    .sortBy("merchant_id") \
     .option("compression", "snappy") \
     .format("parquet") \
     .saveAsTable("temp01")
